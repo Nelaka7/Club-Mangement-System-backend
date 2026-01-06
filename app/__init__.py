@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from app.database import init_db
 from datetime import timedelta
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(_name_)
     app.config['DATABASE'] = 'uniclubs.db'
     
     # Flask Secret Key for sessions
@@ -54,5 +54,23 @@ def create_app():
     app.register_blueprint(events_bp, url_prefix='/events')
     app.register_blueprint(memberships_bp, url_prefix='/memberships')
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
+    
+    # Health check endpoint
+    @app.route('/health', methods=['GET'])
+    def health_check():
+        return jsonify({
+            'status': 'healthy',
+            'service': 'UniClub Manager API',
+            'version': '1.0.0'
+        }), 200
+    
+    # Root endpoint
+    @app.route('/', methods=['GET'])
+    def root():
+        return jsonify({
+            'message': 'UniClub Manager API',
+            'health': '/health',
+            'docs': '/api/docs'
+        }), 200
     
     return app
