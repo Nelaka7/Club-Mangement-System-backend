@@ -5,7 +5,7 @@ from app.database import init_db
 from datetime import timedelta
 
 def create_app():
-    app = Flask(_name_)
+    app = Flask(__name__)
     app.config['DATABASE'] = 'uniclubs.db'
     
     # Flask Secret Key for sessions
